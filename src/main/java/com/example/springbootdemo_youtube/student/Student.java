@@ -3,6 +3,8 @@ package com.example.springbootdemo_youtube.student;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
+
 @Entity
 @Table
 public class Student {
@@ -19,7 +21,8 @@ public class Student {
     private String name;
     @Column(name = "dob")
     private LocalDate dob;
-    @Column(name="age")
+//    @Transient is used for field which we don't want to include in table is calculate from other column here we can derive age from dob
+    @Transient
     private Integer age;
     @Column(name = "email")
     private String email;
@@ -27,18 +30,16 @@ public class Student {
     public Student() {
     }
 
-    public Student(Long id, String name, LocalDate dob, Integer age, String email) {
+    public Student(Long id, String name, LocalDate dob,  String email) {
         this.id = id;
         this.name = name;
         this.dob = dob;
-        this.age = age;
         this.email = email;
     }
 
-    public Student(String name, LocalDate dob, Integer age, String email) {
+    public Student(String name, LocalDate dob, String email) {
         this.name = name;
         this.dob = dob;
-        this.age = age;
         this.email = email;
     }
 
@@ -67,11 +68,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
+        return Period.between(this.dob,LocalDate.now()).getYears();
     }
 
     public String getEmail() {
